@@ -176,7 +176,7 @@
       /* The Image Wrapper */
       .flower-wrapper {
         position: relative;
-        width: 320px; /* Made slightly larger to showcase the beautiful image */
+        width: 320px;
         height: 320px;
         display: flex;
         justify-content: center;
@@ -596,19 +596,30 @@
       }
 
       function notifyAdmin() {
-        // Remember to fill these in if you want the email to work!
-        const serviceID = "YOUR_SERVICE_ID";
-        const templateID = "YOUR_TEMPLATE_ID";
-        const publicKey = "YOUR_PUBLIC_KEY";
+        // Your real EmailJS keys are now here
+        const serviceID = "service_avv16cy";
+        const templateID = "template_7oioy3k";
+        const publicKey = "aQ-ugC8f-jkGPfXkJ";
 
-        if (publicKey !== "YOUR_PUBLIC_KEY" && window.emailjs) {
+        if (window.emailjs) {
           emailjs.init(publicKey);
           emailjs
             .send(serviceID, templateID, {
-              to_email: "phanapheakkdey@gmail.com",
+              to_email: "joyjab9@gmail.com",
               message: "Someone answered YES to your confession!",
             })
-            .catch(console.error);
+            .then(
+              function (response) {
+                console.log(
+                  "Email sent successfully!",
+                  response.status,
+                  response.text,
+                );
+              },
+              function (error) {
+                console.error("Email failed to send...", error);
+              },
+            );
         }
       }
 
