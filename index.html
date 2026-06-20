@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For You...</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* Intro Colors */
+        --bg-night-1: #0f0c29;
+        --bg-night-2: #302b63;
+        --bg-night-3: #24243e;
+
+        /* Confession Colors */
+        --text-main: #2d2424;
+        --text-muted: #5c4b4b;
+        --accent: #e63946;
+        --accent-hover: #d62828;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        overflow: hidden; /* Prevents scrollbars during animations */
+        color: white;
+        background-color: var(--bg-night-1);
+      }
+
+      /* =========================================
+         TRANSITION OVERLAY
+         ========================================= */
+      .fade-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 100;
+        transition: opacity 1.2s ease-in-out;
+      }
+
+      .fade-overlay.active {
+        opacity: 1;
+      }
+
+      /* =========================================
+         PHASE 1: INTRO SECTION (NIGHT SKY & HEART)
+         ========================================= */
+      #intro-section {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          var(--bg-night-1),
+          var(--bg-night-2),
+          var(--bg-night-3)
+        );
+        background-size: 400% 400%;
+        animation: nightSky 15s ease infinite;
+        z-index: 10;
+      }
+
+      @keyframes nightSky {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Firefly particles */
+      .firefly {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background-color: #fffbdf;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 2px #ffeba8;
+        pointer-events: none;
+        z-index: 1;
+        animation: floatFirefly linear infinite;
+      }
+
+      @keyframes floatFirefly {
+        0% {
+          transform: translateY(100vh) translateX(0) scale(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+          scale: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-10vh) translateX(50px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* Text Animations */
+      .text-container {
+        position: absolute;
+        top: 15%;
+        z-index: 10;
+        text-align: center;
+        animation: fadeInDown 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+
+      .text-container h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2.5rem;
+        font-weight: 600;
+        font-style: italic;
+        margin-bottom: 10px;
+        color: white;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      }
+
+      .text-container p {
+        font-size: 1.1rem;
+        font-weight: 300;
+        opacity: 0.8;
+        color: white;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulseText 3s ease-in-out infinite;
+      }
+
+      @keyframes fadeInDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes pulseText {
+        0%,
+        100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 1;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+      }
+
+      /* The Image Wrapper */
+      .flower-wrapper {
+        position: relative;
+        width: 320px; /* Made slightly larger to showcase the beautiful image */
+        height: 320px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 10;
+        animation: floatFlower 4s ease-in-out infinite;
+      }
+
+      @keyframes floatFlower {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+
+      /* New styling for your Rose Heart Image */
+      .heart-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        filter: drop-shadow(0 0 15px rgba(255, 117, 140, 0.4));
+      }
+
+      /* Hover effect */
+      .flower-wrapper:hover .heart-image {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 25px rgba(255, 117, 140, 0.6));
+      }
+
+      /* Click Animation (Bloom/Explode for image) */
+      .heart-image.bloomed {
+        transform: scale(3);
+        opacity: 0;
+        filter: blur(10px);
+      }
+
+      /* =========================================
+         PHASE 2: CONFESSION SECTION (SUNSET)
+         ========================================= */
+      #confession-section {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: none; /* Hidden until image is clicked */
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(
+          180deg,
+          #1a0b2e 0%,
+          #4b1d52 25%,
+          #9a2b53 50%,
+          #de5d4e 80%,
+          #f69d3c 100%
+        );
+        background-size: 100% 200%;
+        animation: sunsetGlow 12s ease-in-out infinite alternate;
+        z-index: 5;
+      }
+
+      #confession-section::before {
+        content: "";
+        position: absolute;
+        width: 60vw;
+        height: 60vw;
+        background: radial-gradient(
+          circle,
+          rgba(255, 180, 100, 0.25) 0%,
+          transparent 60%
+        );
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      @keyframes sunsetGlow {
+        0% {
+          background-position: 50% 0%;
+        }
+        100% {
+          background-position: 50% 100%;
+        }
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        padding: 60px 40px;
+        border-radius: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow:
+          0 40px 80px rgba(0, 0, 0, 0.15),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        max-width: 90%;
+        width: 480px;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeUpIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      @keyframes fadeUpIn {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .glass-card h2 {
+        font-family: "Playfair Display", serif;
+        color: var(--text-main);
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        line-height: 1.2;
+      }
+
+      .glass-card p {
+        color: var(--text-muted);
+        font-size: 1.15rem;
+        margin-bottom: 45px;
+        font-weight: 500;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        position: relative;
+        height: 56px;
+      }
+
+      button {
+        font-family: "Poppins", sans-serif;
+        font-size: 1.1rem;
+        padding: 0 40px;
+        height: 56px;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 12;
+      }
+
+      #yesBtn {
+        background: var(--accent);
+        color: white;
+        box-shadow: 0 10px 25px rgba(230, 57, 70, 0.3);
+        animation: pulseHeartbeat 2.5s infinite;
+      }
+
+      #yesBtn:hover {
+        background: var(--accent-hover);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(230, 57, 70, 0.4);
+      }
+
+      @keyframes pulseHeartbeat {
+        0% {
+          box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(230, 57, 70, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
+        }
+      }
+
+      #noBtn {
+        background: rgba(255, 255, 255, 0.7);
+        color: var(--text-muted);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+      }
+
+      #successMessage {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+      }
+
+      #successMessage img {
+        width: 100%;
+        max-width: 300px;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        border: 4px solid rgba(255, 255, 255, 0.8);
+        margin-top: 20px;
+      }
+
+      /* Elegant floating hearts */
+      @keyframes floatSoft {
+        0% {
+          transform: translateY(0) scale(1) rotate(0deg);
+          opacity: 0;
+        }
+        20% {
+          opacity: 0.6;
+        }
+        80% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-100vh) scale(0.6) rotate(20deg);
+          opacity: 0;
+        }
+      }
+
+      .floating-element {
+        position: fixed;
+        pointer-events: none;
+        z-index: 5;
+        animation: floatSoft linear forwards;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fade-overlay" id="fadeOverlay"></div>
+
+    <section id="intro-section">
+      <div class="text-container" id="textContainer">
+        <h1>I found this for you...</h1>
+        <p>Tap the flower</p>
+      </div>
+
+      <div class="flower-wrapper" onclick="triggerTransition()">
+        <img
+          id="magicFlower"
+          class="heart-image"
+          src="https://media.craiyon.com/2025-08-12/uCcotvakRY6jL2jvi4-2hA.webp"
+          alt="Rose Heart ECG"
+        />
+      </div>
+    </section>
+
+    <section id="confession-section">
+      <div class="glass-card" id="mainContainer">
+        <h2>Hey Dalin,</h2>
+        <p>I have a question... Will you be my girlfriend? 🥺</p>
+        <div class="buttons" id="buttonGroup">
+          <button id="yesBtn" onclick="sayYes()">Yes!</button>
+          <button id="noBtn" onmouseover="dodgeCursor()">No</button>
+        </div>
+      </div>
+
+      <div class="glass-card" id="successMessage">
+        <h2 style="font-size: 2.2rem">Best decision ever. ❤️</h2>
+        <img
+          src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif"
+          alt="Cute celebration"
+        />
+      </div>
+    </section>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"
+    ></script>
+
+    <script>
+      /* ==============================================
+         PHASE 1 LOGIC (Fireflies & Transition)
+         ============================================== */
+      const introSection = document.getElementById("intro-section");
+      const confessionSection = document.getElementById("confession-section");
+      let fireflyInterval;
+
+      function createFirefly() {
+        const firefly = document.createElement("div");
+        firefly.className = "firefly";
+        firefly.style.left = Math.random() * 100 + "vw";
+        const duration = Math.random() * 5 + 5;
+        firefly.style.animationDuration = duration + "s";
+        introSection.appendChild(firefly);
+        setTimeout(() => {
+          if (introSection.contains(firefly)) firefly.remove();
+        }, duration * 1000);
+      }
+
+      // Start initial fireflies
+      for (let i = 0; i < 20; i++) {
+        setTimeout(createFirefly, Math.random() * 3000);
+      }
+      fireflyInterval = setInterval(createFirefly, 500);
+
+      function triggerTransition() {
+        const flower = document.getElementById("magicFlower");
+        const text = document.getElementById("textContainer");
+        const overlay = document.getElementById("fadeOverlay");
+
+        // Prevent clicking multiple times
+        if (flower.classList.contains("bloomed")) return;
+
+        // 1. Fade out the text
+        text.style.transition = "opacity 0.5s ease";
+        text.style.opacity = "0";
+
+        // 2. Trigger the image explosion/bloom CSS
+        flower.classList.add("bloomed");
+
+        // 3. Fade the whole screen to white (delayed slightly to see the bloom)
+        setTimeout(() => {
+          overlay.classList.add("active");
+        }, 800);
+
+        // 4. Swap the screens while hidden behind the white overlay
+        setTimeout(() => {
+          introSection.style.display = "none";
+          clearInterval(fireflyInterval); // Stop creating fireflies to save memory
+
+          confessionSection.style.display = "flex";
+
+          // Start the sunset floating hearts
+          setInterval(createSunsetAmbientElement, 600);
+
+          // Remove the white overlay to reveal the sunset confession
+          overlay.classList.remove("active");
+        }, 2000);
+      }
+
+      /* ==============================================
+         PHASE 2 LOGIC (Confession & Celebration)
+         ============================================== */
+      const noBtn = document.getElementById("noBtn");
+
+      // Ambient elegant shapes (Hearts and sparkles) for the sunset
+      function createSunsetAmbientElement() {
+        const el = document.createElement("div");
+        el.className = "floating-element";
+        el.textContent = ["🤍", "✨", "🌸", "💖"][
+          Math.floor(Math.random() * 4)
+        ];
+        el.style.fontSize = Math.random() * 15 + 15 + "px";
+        el.style.left = Math.random() * 100 + "vw";
+        el.style.bottom = "-50px";
+
+        const duration = Math.random() * 6 + 6;
+        el.style.animationDuration = duration + "s";
+
+        confessionSection.appendChild(el);
+        setTimeout(() => {
+          if (confessionSection.contains(el)) el.remove();
+        }, duration * 1000);
+      }
+
+      // Smooth Evasive logic for the "No" button
+      function dodgeCursor() {
+        noBtn.style.position = "absolute";
+
+        // Calculate safe boundaries so the button doesn't fly off screen
+        const padding = 20;
+        const container = document.getElementById("mainContainer");
+
+        // Move randomly around the screen, keeping it within view
+        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+        const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+        const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+        noBtn.style.transition = "left 0.3s ease, top 0.3s ease";
+        noBtn.style.left = randomX + "px";
+        noBtn.style.top = randomY + "px";
+      }
+
+      // Success Celebration Explosion
+      function triggerCelebration() {
+        for (let i = 0; i < 60; i++) {
+          setTimeout(() => {
+            const heart = document.createElement("div");
+            heart.className = "floating-element";
+            heart.textContent = ["💖", "💕", "💘", "🥰"][
+              Math.floor(Math.random() * 4)
+            ];
+            heart.style.fontSize = Math.random() * 20 + 20 + "px";
+            heart.style.left = window.innerWidth / 2 + "px";
+            heart.style.top = window.innerHeight / 2 + "px";
+
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = Math.random() * 250 + 100;
+            const tx = Math.cos(angle) * velocity;
+            const ty = Math.sin(angle) * velocity - 150;
+
+            heart.style.transition = "all 1.8s cubic-bezier(0.1, 0.8, 0.2, 1)";
+
+            confessionSection.appendChild(heart);
+
+            // Trigger reflow
+            void heart.offsetWidth;
+
+            heart.style.transform = `translate(${tx}px, ${ty}px) scale(${Math.random() * 1 + 0.5})`;
+            heart.style.opacity = "0";
+
+            setTimeout(() => {
+              if (confessionSection.contains(heart)) heart.remove();
+            }, 1800);
+          }, i * 15);
+        }
+      }
+
+      function notifyAdmin() {
+        // Remember to fill these in if you want the email to work!
+        const serviceID = "YOUR_SERVICE_ID";
+        const templateID = "YOUR_TEMPLATE_ID";
+        const publicKey = "YOUR_PUBLIC_KEY";
+
+        if (publicKey !== "YOUR_PUBLIC_KEY" && window.emailjs) {
+          emailjs.init(publicKey);
+          emailjs
+            .send(serviceID, templateID, {
+              to_email: "phanapheakkdey@gmail.com",
+              message: "Someone answered YES to your confession!",
+            })
+            .catch(console.error);
+        }
+      }
+
+      function sayYes() {
+        notifyAdmin();
+        triggerCelebration();
+
+        const main = document.getElementById("mainContainer");
+        const success = document.getElementById("successMessage");
+
+        // Smooth transition out
+        main.style.opacity = "0";
+        main.style.transform = "translateY(-40px)";
+        main.style.pointerEvents = "none";
+
+        setTimeout(() => {
+          main.style.display = "none";
+          success.style.display = "flex";
+
+          // Smooth transition in
+          requestAnimationFrame(() => {
+            success.style.opacity = "1";
+            success.style.transform = "translateY(0)";
+          });
+
+          setTimeout(triggerCelebration, 400);
+          setTimeout(triggerCelebration, 1000);
+        }, 500);
+      }
+    </script>
+  </body>
+</html>
