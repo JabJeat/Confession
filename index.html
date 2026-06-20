@@ -10,16 +10,16 @@
     />
     <style>
       :root {
-        /* Intro Colors */
         --bg-night-1: #0f0c29;
         --bg-night-2: #302b63;
         --bg-night-3: #24243e;
 
-        /* Confession Colors */
         --text-main: #2d2424;
         --text-muted: #5c4b4b;
         --accent: #e63946;
         --accent-hover: #d62828;
+        --btn-pink: #ff7eb3;
+        --btn-pink-hover: #ff529a;
       }
 
       * {
@@ -30,14 +30,11 @@
 
       body {
         font-family: "Poppins", sans-serif;
-        overflow: hidden; /* Prevents scrollbars during animations */
+        overflow: hidden;
         color: white;
         background-color: var(--bg-night-1);
       }
 
-      /* =========================================
-         TRANSITION OVERLAY
-         ========================================= */
       .fade-overlay {
         position: fixed;
         top: 0;
@@ -55,9 +52,6 @@
         opacity: 1;
       }
 
-      /* =========================================
-         PHASE 1: INTRO SECTION (NIGHT SKY & HEART)
-         ========================================= */
       #intro-section {
         position: fixed;
         top: 0;
@@ -91,7 +85,6 @@
         }
       }
 
-      /* Firefly particles */
       .firefly {
         position: absolute;
         width: 4px;
@@ -122,7 +115,6 @@
         }
       }
 
-      /* Text Animations */
       .text-container {
         position: absolute;
         top: 15%;
@@ -173,7 +165,6 @@
         }
       }
 
-      /* The Image Wrapper */
       .flower-wrapper {
         position: relative;
         width: 320px;
@@ -196,7 +187,6 @@
         }
       }
 
-      /* New styling for your Rose Heart Image */
       .heart-image {
         width: 100%;
         height: 100%;
@@ -205,29 +195,24 @@
         filter: drop-shadow(0 0 15px rgba(255, 117, 140, 0.4));
       }
 
-      /* Hover effect */
       .flower-wrapper:hover .heart-image {
         transform: scale(1.05);
         filter: drop-shadow(0 0 25px rgba(255, 117, 140, 0.6));
       }
 
-      /* Click Animation (Bloom/Explode for image) */
       .heart-image.bloomed {
         transform: scale(3);
         opacity: 0;
         filter: blur(10px);
       }
 
-      /* =========================================
-         PHASE 2: CONFESSION SECTION (SUNSET)
-         ========================================= */
       #confession-section {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        display: none; /* Hidden until image is clicked */
+        display: none;
         justify-content: center;
         align-items: center;
         background: linear-gradient(
@@ -279,7 +264,7 @@
         box-shadow:
           0 40px 80px rgba(0, 0, 0, 0.15),
           inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-        position: relative;
+        position: absolute;
         z-index: 10;
         text-align: center;
         max-width: 90%;
@@ -313,6 +298,7 @@
         font-size: 1.15rem;
         margin-bottom: 45px;
         font-weight: 500;
+        line-height: 1.6;
       }
 
       .buttons {
@@ -334,6 +320,18 @@
         font-weight: 600;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 12;
+      }
+
+      #nextBtn {
+        background: var(--btn-pink);
+        color: white;
+        box-shadow: 0 10px 25px rgba(255, 126, 179, 0.3);
+      }
+
+      #nextBtn:hover {
+        background: var(--btn-pink-hover);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(255, 126, 179, 0.4);
       }
 
       #yesBtn {
@@ -368,11 +366,9 @@
         border: 1px solid rgba(255, 255, 255, 0.9);
       }
 
+      #mainContainer,
       #successMessage {
         display: none;
-        flex-direction: column;
-        align-items: center;
-        position: absolute;
       }
 
       #successMessage img {
@@ -384,7 +380,6 @@
         margin-top: 20px;
       }
 
-      /* Elegant floating hearts */
       @keyframes floatSoft {
         0% {
           transform: translateY(0) scale(1) rotate(0deg);
@@ -431,8 +426,20 @@
     </section>
 
     <section id="confession-section">
-      <div class="glass-card" id="mainContainer">
+      <div class="glass-card" id="sweetMessageCard">
         <h2>Hey Dalin,</h2>
+        <p>
+          I just wanted to take a moment to tell you how special you are to me.
+          Every time we talk, you make my day so much brighter. I've been
+          meaning to tell you this for a while now...
+        </p>
+        <div class="buttons">
+          <button id="nextBtn" onclick="goToQuestion()">Continue ❤️</button>
+        </div>
+      </div>
+
+      <div class="glass-card" id="mainContainer">
+        <h2>So...</h2>
         <p>I have a question... Will you be my girlfriend? 🥺</p>
         <div class="buttons" id="buttonGroup">
           <button id="yesBtn" onclick="sayYes()">Yes!</button>
@@ -440,7 +447,11 @@
         </div>
       </div>
 
-      <div class="glass-card" id="successMessage">
+      <div
+        class="glass-card"
+        id="successMessage"
+        style="display: none; flex-direction: column; align-items: center"
+      >
         <h2 style="font-size: 2.2rem">Best decision ever. ❤️</h2>
         <img
           src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif"
@@ -455,9 +466,6 @@
     ></script>
 
     <script>
-      /* ==============================================
-         PHASE 1 LOGIC (Fireflies & Transition)
-         ============================================== */
       const introSection = document.getElementById("intro-section");
       const confessionSection = document.getElementById("confession-section");
       let fireflyInterval;
@@ -474,7 +482,6 @@
         }, duration * 1000);
       }
 
-      // Start initial fireflies
       for (let i = 0; i < 20; i++) {
         setTimeout(createFirefly, Math.random() * 3000);
       }
@@ -485,42 +492,57 @@
         const text = document.getElementById("textContainer");
         const overlay = document.getElementById("fadeOverlay");
 
-        // Prevent clicking multiple times
         if (flower.classList.contains("bloomed")) return;
 
-        // 1. Fade out the text
         text.style.transition = "opacity 0.5s ease";
         text.style.opacity = "0";
 
-        // 2. Trigger the image explosion/bloom CSS
         flower.classList.add("bloomed");
 
-        // 3. Fade the whole screen to white (delayed slightly to see the bloom)
         setTimeout(() => {
           overlay.classList.add("active");
         }, 800);
 
-        // 4. Swap the screens while hidden behind the white overlay
         setTimeout(() => {
           introSection.style.display = "none";
-          clearInterval(fireflyInterval); // Stop creating fireflies to save memory
+          clearInterval(fireflyInterval);
 
           confessionSection.style.display = "flex";
 
-          // Start the sunset floating hearts
-          setInterval(createSunsetAmbientElement, 600);
+          document.getElementById("sweetMessageCard").style.display = "block";
+          document.getElementById("mainContainer").style.display = "none";
 
-          // Remove the white overlay to reveal the sunset confession
+          setInterval(createSunsetAmbientElement, 600);
           overlay.classList.remove("active");
         }, 2000);
       }
 
-      /* ==============================================
-         PHASE 2 LOGIC (Confession & Celebration)
-         ============================================== */
+      function goToQuestion() {
+        const msgCard = document.getElementById("sweetMessageCard");
+        const questionCard = document.getElementById("mainContainer");
+
+        msgCard.style.opacity = "0";
+        msgCard.style.transform = "translateY(-40px)";
+        msgCard.style.pointerEvents = "none";
+
+        setTimeout(() => {
+          msgCard.style.display = "none";
+
+          questionCard.style.display = "block";
+          questionCard.style.opacity = "0";
+          questionCard.style.transform = "translateY(30px)";
+
+          requestAnimationFrame(() => {
+            questionCard.style.transition =
+              "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)";
+            questionCard.style.opacity = "1";
+            questionCard.style.transform = "translateY(0)";
+          });
+        }, 500);
+      }
+
       const noBtn = document.getElementById("noBtn");
 
-      // Ambient elegant shapes (Hearts and sparkles) for the sunset
       function createSunsetAmbientElement() {
         const el = document.createElement("div");
         el.className = "floating-element";
@@ -540,15 +562,11 @@
         }, duration * 1000);
       }
 
-      // Smooth Evasive logic for the "No" button
       function dodgeCursor() {
         noBtn.style.position = "absolute";
 
-        // Calculate safe boundaries so the button doesn't fly off screen
         const padding = 20;
-        const container = document.getElementById("mainContainer");
 
-        // Move randomly around the screen, keeping it within view
         const maxX = window.innerWidth - noBtn.offsetWidth - padding;
         const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
@@ -560,7 +578,6 @@
         noBtn.style.top = randomY + "px";
       }
 
-      // Success Celebration Explosion
       function triggerCelebration() {
         for (let i = 0; i < 60; i++) {
           setTimeout(() => {
@@ -582,7 +599,6 @@
 
             confessionSection.appendChild(heart);
 
-            // Trigger reflow
             void heart.offsetWidth;
 
             heart.style.transform = `translate(${tx}px, ${ty}px) scale(${Math.random() * 1 + 0.5})`;
@@ -596,7 +612,6 @@
       }
 
       function notifyAdmin() {
-        // Your real EmailJS keys are now here
         const serviceID = "service_a63jhoe";
         const templateID = "template_7oioy3k";
         const publicKey = "e7VkUAJiFq7R0H2Az";
@@ -630,7 +645,6 @@
         const main = document.getElementById("mainContainer");
         const success = document.getElementById("successMessage");
 
-        // Smooth transition out
         main.style.opacity = "0";
         main.style.transform = "translateY(-40px)";
         main.style.pointerEvents = "none";
@@ -639,7 +653,6 @@
           main.style.display = "none";
           success.style.display = "flex";
 
-          // Smooth transition in
           requestAnimationFrame(() => {
             success.style.opacity = "1";
             success.style.transform = "translateY(0)";
